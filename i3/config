@@ -1,0 +1,225 @@
+# x-11 propagation
+exec dbus-update-activation-environment --systemd DBUS_SESSION_BUS_ADDRESS DISPLAY XAUTHORITY &
+
+
+exec_always --no-startup-id autotiling
+#------------------------------- touch inputs----------------------------------
+#dpi config
+exec_always --no-startup-id xrandr --dpi 220
+exec_always export GDK_SCALE=2
+exec_always export GDK_DPI_SCALE=0.5
+
+#wallpaper setup
+#exec --no-startup-id feh --bg-fill ~/Pictures/wallpaper.jpg
+
+# start redshift
+exec --no-startup-id redshift -l 34.0436857:-118.262136
+
+#start bluetooth
+#exec --no-startup-id blueman-applet
+
+# vertical and horizontal scrolling
+exec --no-startup-id xinput set-prop "SynPS/2 Synaptics TouchPad" "Synaptics Two-Finger Scrolling" 1, 1
+
+# natural scroling
+exec --no-startup-id xinput set-prop "SynPS/2 Synaptics TouchPad" "Synaptics Scrolling Distance" -106, -106
+
+# tap to click
+exec --no-startup-id synclient TapButton1=1 TapButton2=3 TapButton3=2
+
+# no titles
+for_window [class="^.*"] border pixel 1.5
+
+# Pulse Audio controls
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
+
+# Sreen brightness controls
+bindsym XF86MonBrightnessUp exec xbacklight -inc 1.5 # increase screen brightness
+bindsym XF86MonBrightnessDown exec xbacklight -dec 1.5 # decrease screen brightness
+
+
+# Touchpad controls
+bindsym XF86TouchpadToggle exec /some/path/toggletouchpad.sh # toggle touchpad
+
+# Media player controls
+bindsym XF86AudioPlay exec playerctl play
+bindsym XF86AudioPause exec playerctl pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
+
+set $mod Mod4
+
+# picom
+exec --no-startup-id picom -b
+
+set $mod Mod4
+
+# Font for window titles.
+font pango:FiraCode Nerd Font Mono 12
+
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+#----------------------------System bindings-----------------------------------
+
+# lock
+bindsym $mod+z exec sh  ~/Dots/lock
+
+#screen off
+bindsym $mod+x exec xset dpms force off
+
+# start a terminal
+#bindsym $mod+Return exec alacritty
+bindsym $mod+Return exec kitty
+
+# kill focused window
+bindsym $mod+Shift+q kill
+
+# start dmenu_run
+bindsym $mod+d exec dmenu_run -nb '#000' -sf '#000' -sb '#fff' -nf '#fff' -fn 'FiraCode Nerd Font Mono 12'
+
+#firefor
+bindsym $mod+shift+f exec firefox
+
+# cursor keys:
+bindsym $mod+Left focus left
+bindsym $mod+h focus left
+
+bindsym $mod+Down focus down
+bindsym $mod+j focus down
+
+bindsym $mod+Up focus up
+bindsym $mod+k focus up
+
+bindsym $mod+Right focus right
+bindsym $mod+l focus right
+
+# move focused window
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+# cursor keys:
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# split in horizontal orientation
+bindsym $mod+o split h
+
+# split in vertical orientation
+bindsym $mod+v split v
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# sticky window
+bindsym $mod+Shift+S sticky toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# focus the parent container
+bindsym $mod+a focus parent
+
+# focus the child container
+
+# switch to workspace
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9
+bindsym $mod+0 workspace 10
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+5 move container to workspace 5
+bindsym $mod+Shift+6 move container to workspace 6
+bindsym $mod+Shift+7 move container to workspace 7
+bindsym $mod+Shift+8 move container to workspace 8
+bindsym $mod+Shift+9 move container to workspace 9
+bindsym $mod+Shift+0 move container to workspace 10
+
+# reload the configuration file
+bindsym $mod+Shift+c reload
+# restart i3 inplace
+bindsym $mod+Shift+r restart
+# exit i3
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+
+# resize window
+mode "resize" {
+
+
+# resize mode
+    bindsym l resize shrink width 10 px or 10 ppt
+    bindsym k resize grow height 10 px or 10 ppt
+    bindsym j resize shrink height 10 px or 10 ppt
+    bindsym h resize grow width 10 px or 10 ppt
+
+# arrow keys
+    bindsym Left resize shrink width 10 px or 10 ppt
+    bindsym Down resize grow height 10 px or 10 ppt
+    bindsym Up resize shrink height 10 px or 10 ppt
+    bindsym Right resize grow width 10 px or 10 ppt
+
+# back to normal
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+# window colors:
+
+client.focused              #fefdfb #fefdfb #fefdfb #fefdfb
+client.unfocused            #000000 #000000 #000000 #000000
+client.focused_inactive     #000000 #000000 #000000 #000000
+client.urgent               #FFFFFF #1D1D1D  #8FA388 #8FA388
+
+bindsym $mod+r mode "resize"
+
+# Start i3bar to display a workspace bar (plus the system information i3status
+# finds out, if available)
+#Bar
+bar {
+    #mode hide
+    strip_workspace_numbers no
+    position top
+    status_command i3status -c ~/.config/i3/i3status.conf
+
+    colors {
+        background  #000000
+        statusline  #E9F4FE
+        separator   #757575
+
+        #selection          #border #fill    #text
+        focused_workspace   #000000 #000000  #ffffff
+        active_workspace    #000000 #000000  #ffffff
+        inactive_workspace  #000000 #000000  #5e5d5b
+        urgent_workspace    #000000 #000000  #D07455
+        #binding_mode        #393F4C #272b35  #393F4C
+    }
+}
+
+#venus wallpaper setup
+#exec sh ~/Dots/wallpaper_boot.sh
